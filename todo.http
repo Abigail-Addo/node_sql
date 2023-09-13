@@ -14,8 +14,3 @@ Content-Type: application/json
 ###
 # delete item
 DELETE http://localhost:7070/todo/item/1
-Content-Type: application/json
-
-{
-    "item": "watch js tutorial"
-}

@@ -6,9 +6,9 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const path = require('path')
 const routes = require('./routes')
-const router = require('./router')
+const router = require('./router')    
 
-    
+const objection = require('./router/routes')
 
 const PORT = 7070;  //server port
 
@@ -33,6 +33,8 @@ app.get('/', (req, res) => {
 //api
 app.use('/api', routes)
 app.use('/todo', router)
+app.use('/shop', objection)
+
 
 
   //start app on this port
