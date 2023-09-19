@@ -6,7 +6,8 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const path = require('path')
 const routes = require('./routes')
-const router = require('./router')    
+const router = require('./router')
+// require('dotenv').config()
 
 const objection = require('./router/routes')
 
