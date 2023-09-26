@@ -5,9 +5,6 @@ const Order = require('./order')
 
 Model.knex(knex);
 
-
-
-
 class Customer extends Model {
     static tableName = 'customers';
 
@@ -19,6 +16,7 @@ class Customer extends Model {
                 id: { type: 'integer' },
                 city: { type: 'string' },
                 name: { type: 'string' },
+                token: { type: 'string' },
                 created_at: { type: 'string' },
                 updated_at: { type: 'string' }
             }

@@ -12,8 +12,20 @@ POST http://localhost:7070/shop/v1/customer
 Content-Type: application/json
 
 {
-    "name": "Justin Fraser",
-    "city": "Paris"
+    "name" : "Abigail Addo",
+    "city" : "Accra",
+    "token" :"admin1234sfdsfsfd454632122345%^&*£"
+}
+
+###
+# create a new customer  with token
+POST http://localhost:7070/shop/v1/customer-with-token
+Content-Type: application/json
+
+{
+    "name" : "Abigail Addo",
+    "city" : "Accra",
+    "token" :"admin1234sfdsfsfd454632122345%^&*£"
 }
 
 ###

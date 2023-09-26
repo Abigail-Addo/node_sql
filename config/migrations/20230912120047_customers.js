@@ -7,6 +7,7 @@ exports.up = function (knex) {
         table.increments('id').primary();
         table.string('name').notNullable();
         table.string('city').notNullable();
+        table.string('token').notNullable();
         table.timestamps(true, true);
     })
 };

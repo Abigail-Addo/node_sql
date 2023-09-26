@@ -243,31 +243,47 @@ window.addEventListener('load', async () => {
         });
     });
 
-    const switched = document.querySelector('.content .header .switch');
+    // toggler
+    const light_mode = document.querySelector("div.theme-toggler span.light_mode");
+    const dark_mode = document.querySelector("div.theme-toggler span.dark_mode");
 
-    switched.addEventListener('click', function (e) {
-        e.preventDefault();
-
-        document.body.classList.toggle('theme-dark');
+    dark_mode.addEventListener('click', () => {
+        document.body.classList.add('dark-theme-variables');
+        dark_mode.classList.add('active');
+        light_mode.classList.remove('active');
     });
 
-    setInterval(() => {
-        const width = window.innerWidth;
-        if (width <= 480) {
-            console.log('width is less than 480');
-            const sidebar = document.querySelector('.sidebar');
-            sidebar.classList.add('sidebar-short');
-        }
-    }, 4000);
-
-    const showBtn = document.querySelector('.show span');
-    const sidebar = document.querySelector('.sidebar');
-
-    showBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        sidebar.classList.remove('sidebar-short');
-        sidebar.classList.toggle('sidebar-full');
+    light_mode.addEventListener('click', () => {
+        document.body.classList.remove('dark-theme-variables');
+        dark_mode.classList.remove('active');
+        light_mode.classList.add('active');
     });
+
+    // const switched = document.querySelector('.content .header .switch');
+
+    // switched.addEventListener('click', function (e) {
+    //     e.preventDefault();
+
+    //     document.body.classList.toggle('theme-dark');
+    // });
+
+    // setInterval(() => {
+    //     const width = window.innerWidth;
+    //     if (width <= 480) {
+    //         console.log('width is less than 480');
+    //         const sidebar = document.querySelector('.sidebar');
+    //         sidebar.classList.add('sidebar-short');
+    //     }
+    // }, 4000);
+
+    // const showBtn = document.querySelector('.show span');
+    // const sidebar = document.querySelector('.sidebar');
+
+    // showBtn.addEventListener('click', function (e) {
+    //     e.preventDefault();
+    //     sidebar.classList.remove('sidebar-short');
+    //     sidebar.classList.toggle('sidebar-full');
+    // });
 
 
 

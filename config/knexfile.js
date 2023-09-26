@@ -5,6 +5,9 @@
  */
 module.exports = {
 
+// npx knex migrate:rollback --all
+
+
   // development: {
   //   client: 'sqlite3',
   //   connection: {
