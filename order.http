@@ -1,6 +1,6 @@
 ###
 # get by customer id orders
-GET http://localhost:7070/shop/v1/orderWithC/1
+GET http://localhost:7070/shop/v1/orderWithC/6
 
 ###
 # get all orders
@@ -8,7 +8,7 @@ GET http://localhost:7070/shop/v1/orders
 
 ###
 # get one order by id
-GET http://localhost:7070/shop/v1/order/1
+GET http://localhost:7070/shop/v1/order/6
 
 ###
 # create a new order 
@@ -17,8 +17,8 @@ Content-Type: application/json
 
 {
     "customer_id": 1,
-    "price": 400.00,
-    "product":"Hair brush"
+    "price": 400,
+    "product_id":9,
 }
 
 ###

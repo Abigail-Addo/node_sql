@@ -101,8 +101,6 @@ app.use('/shop', objection)
 
 // })
 
-
-
 //start app on this port
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
