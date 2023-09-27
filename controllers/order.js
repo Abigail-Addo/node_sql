@@ -1,4 +1,5 @@
 const Order = require('../model/order')
+const Product = require('../model/product')
 
 exports.getOrder = async (req, res) => {
 
@@ -35,19 +36,37 @@ exports.getOrders = async (req, res) => {
 exports.CreateOrder = async (req, res) => {
     //create
     try {
-        // const {name , city} = req.body;
-        if (req.body.product_id != '' || req.body.customer_id != '') {
+        const { product_id, customer_id } = req.body;
 
-            //create
-            const order = await Order.query().insertGraph({
-                product_id: req.body.product_id,
-                customer_id: req.body.customer_id,
-                price: req.body.price
-            });
-            if (!order) {
-                throw new Error("check db connection, customer table doesn't exit")
+        if (product_id != '' || customer_id != '') {
+
+            if (typeof (product_id == Number) || typeof (customer_id == Number)) {
+                // getting the price
+                const product = await Product.query().findById(product_id);
+                console.log(product)
+
+                if (product.price) {
+                    //check if order is already inserted
+                    const productId = await Order.query().findById(product_id)
+                    if (productId) {
+                        return res.status(409).json({ message: "product already inserted" })
+                    }
+
+                    // product.id while false
+                    //create
+                    const order = await Order.query().insertGraph({
+                        product_id: product_id,
+                        customer_id: customer_id,
+                        price: product.price
+                    });
+                    if (!order) {
+                        throw new Error("check db connection, order table doesn't exit")
+                    }
+                    return res.status(200).json(order)
+                }
+
             }
-            return res.status(200).json(order)
+
         }// if condition ends here
 
         return res.status(409).json({ message: "cannot create order without customer id or product id" })
