@@ -20,7 +20,7 @@ exports.getOrders = async (req, res) => {
             .orderBy('id');
 
         if (!order) {
-            throw new Error('customer id doesnt exist')
+            throw new Error('customer id deosnt exit')
         }
         res.status(200).json({ message: 'orders from customer', order });
 
@@ -47,9 +47,11 @@ exports.CreateOrder = async (req, res) => {
 
                 if (product.price) {
                     //check if order is already inserted
-                    const productId = await Order.query().findById(product_id)
+                    const productId = await Order.query()
+                        .where({ product_id: product_id, customer_id: customer_id })
+                        .first();
                     if (productId) {
-                        return res.status(409).json({ message: "product already inserted" })
+                        return res.status(409).json({ message: "product already added to cart" })
                     }
 
                     // product.id while false
@@ -78,15 +80,43 @@ exports.CreateOrder = async (req, res) => {
 }
 
 exports.getOrderWithCustomerId = async (req, res) => {
-    const { customerId } = req.params;
-    const orders = await Order.query().select('*').where('customer_id', customerId).orderBy('id');
+    const { customer_id } = req.body;
+    const orders = await Order.query()
+        .where('customer_id', customer_id)
+        .withGraphFetched('products')
+        .orderBy('id')
     return res.status(200).json(orders)
 
 }
 
 exports.deleteOrder = async (req, res) => {
-    //delete Order
-}
+    try {
+        const { product_id, customer_id } = req.body;
+
+        if (product_id != '' || customer_id != '') {
+
+            const order = await Order.query().findById('product_id');
+
+            if (!order) {
+                return res.status(404).json({ message: "Order not found" });
+            }
+
+            const deletedOrder = await Order.query()
+                .where({ id: product_id })
+                .deleteById('product_id');
+
+            if (!deletedOrder) {
+                throw new Error("Failed to delete order");
+            }
+
+            return res.status(200).json({ message: "Order deleted" });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
 
 exports.updateOrder = async (req, res) => {
 

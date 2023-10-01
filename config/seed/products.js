@@ -36,7 +36,7 @@ exports.seed = function (knex) {
         {
           name: 'Water Wave Lace Front Wig with Baby Hair Glueless',
           price: 2500,
-          description: '100% Unprocessed Virgin Human Hair Wigs',
+          description: 'Pre Plucked With Baby Hair High 180% Density',
           stocks: 9,
           image: 'http://localhost:7070/uploads/pic4.jpg'
         },
