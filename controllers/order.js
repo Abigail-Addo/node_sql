@@ -86,7 +86,6 @@ exports.getOrderWithCustomerId = async (req, res) => {
         .withGraphFetched('products')
         .orderBy('id')
     return res.status(200).json(orders)
-
 }
 
 exports.deleteOrder = async (req, res) => {
