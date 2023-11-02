@@ -56,6 +56,7 @@ router.post('/user', async (req, res) => {
   }
 });
 
+
 //login user
 router.post('/login', async (req, res) => {
   try {
@@ -79,6 +80,7 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
 
 
 // get all employees
