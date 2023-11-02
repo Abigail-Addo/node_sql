@@ -1,10 +1,11 @@
 ###
 # get by customer id orders
-GET http://localhost:7070/shop/v1/orderWithC/6
+GET http://localhost:7070/shop/v1/orderWithCustomerId
 
 ###
 # get all orders
 GET http://localhost:7070/shop/v1/orders
+
 
 ###
 # get one order by id
@@ -23,7 +24,7 @@ Content-Type: application/json
 
 ###
 # create a new order with customer id
-POST http://localhost:7070/shop/v1//v1/orders-with-customerId
+POST http://localhost:7070/shop/v1/orders-with-customerId
 Content-Type: application/json
 
 {

@@ -57,7 +57,13 @@ router.patch('/v1/order/:id', (req, res) => {
     Order.updateOrder(req, res)
 });
 
-router.delete('/v1/order/:id', (req, res)=> {
+// delete all order
+router.delete('/v1/deleteOrders', (req, res)=> {
+    Order.deleteOrders(req, res);
+})
+
+// delete a single order by id
+router.delete('/v1/deleteAnOrder/:product_id', (req, res)=> {
     Order.deleteOrder(req, res);
 })
 

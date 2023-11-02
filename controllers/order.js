@@ -2,8 +2,29 @@ const Order = require('../model/order')
 const Product = require('../model/product')
 
 exports.getOrder = async (req, res) => {
-
     //get Order
+    try {
+        const { customer_id } = req.query;
+
+        if (!customer_id) {
+            return res.status(400).json({ message: 'customer_id is required' });
+        }
+
+        // Query the database to retrieve all orders for the given customer
+        const orders = await Order.query()
+            .where('customer_id', customer_id)
+            .orderBy('id');
+
+        if (!orders || orders.length === 0) {
+            return res.status(404).json({ message: 'No orders found for this customer' });
+        }
+
+        // Return the orders as a JSON response
+        res.status(200).json({ message: 'Orders retrieved successfully', orders });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
 }
 
 exports.getOrders = async (req, res) => {
@@ -30,8 +51,6 @@ exports.getOrders = async (req, res) => {
     }
 
 }
-
-
 
 exports.CreateOrder = async (req, res) => {
     //create
@@ -80,144 +99,74 @@ exports.CreateOrder = async (req, res) => {
 }
 
 exports.getOrderWithCustomerId = async (req, res) => {
-    const { customer_id } = req.body;
-    const orders = await Order.query()
-        .where('customer_id', customer_id)
-        .withGraphFetched('products')
-        .orderBy('id')
-    return res.status(200).json(orders)
+    try {
+        const { customer_id } = req.body;
+
+        const orders = await Order.query()
+            .where('customer_id', customer_id)
+            .withGraphFetched('products')
+            .orderBy('id')
+            
+        return res.status(200).json(orders)
+    } catch (error) {
+        console.error(error); // Log the error message
+        res.status(500).json({ error: 'Server error' });
+    }
+
 }
 
-exports.deleteOrder = async (req, res) => {
+// delete order with customer id
+exports.deleteOrders = async (req, res) => {
     try {
-        const { product_id, customer_id } = req.body;
+        const { customer_id } = req.query; // Get customer_id from query parameters
 
-        if (product_id != '' || customer_id != '') {
-
-            const order = await Order.query().findById('product_id');
-
-            if (!order) {
-                return res.status(404).json({ message: "Order not found" });
-            }
-
-            const deletedOrder = await Order.query()
-                .where({ id: product_id })
-                .deleteById('product_id');
-
-            if (!deletedOrder) {
-                throw new Error("Failed to delete order");
-            }
-
-            return res.status(200).json({ message: "Order deleted" });
+        if (!customer_id) {
+            return res.status(400).json({ message: "Missing or undefined customer_id" });
         }
+
+        // Use the `where` clause to specify the condition for deletion
+        const deletedOrder = await Order.query()
+            .where('customer_id', customer_id)
+            .delete();
+
+        if (!deletedOrder) {
+            return res.status(404).json({ message: "No orders found for the specified customer_id" });
+        }
+
+        return res.status(200).json({ message: "Orders deleted" });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error" });
     }
 };
 
+// delete a single order by id
+exports.deleteOrder = async (req, res) => {
+    //    write a similar thing to delete a single order by id from a customers orders
+    try {
+        const { product_id } = req.params; // Get the order_id from route parameters
+
+        if (!product_id) {
+            return res.status(400).json({ message: "Missing or undefined product_id" });
+        }
+
+        // Use the `deleteById` method to delete the order with the specified `order_id`
+        const deletedOrder = await Order.query()
+            .where('product_id', product_id)
+            .delete();
+
+        if (!deletedOrder) {
+            return res.status(404).json({ message: "Order not found" });
+        }
+
+        return res.status(200).json({ message: "Order deleted" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
 
 exports.updateOrder = async (req, res) => {
 
 }
-
-
-// const Order = require('../model/order')
-
-// exports.getOrder = async (req, res) => {
-//     //get an Order
-//     try {
-//         const { id } = req.params;
-//         const order = await Order.query().findById(id);
-//         if (!order) {
-//             throw new Error("failed to get order, id not found");
-//         }
-//         res.status(200).json(order)
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).send('Server error'); //error
-//     }
-// }
-
-// exports.getOrders = async (req, res) => {
-//     //get all Orders
-//     try {
-//         const orders = await Order.query();
-//         if (!orders) {
-//             throw new Error("check db connection, order table doesn't exit")
-//         }
-//         res.status(200).json(orders)
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).send('Server error'); //error
-//     }
-// }
-
-
-
-// exports.CreateOrder = async (req, res) => {
-//     //create new order
-//     try {
-//         if (req.body.price != '' || req.body.customer_id != '') {
-//             //create
-//             const order = await Order.query().insertGraph({
-//                 customer_id: req.body.customer_id,
-//                 price: req.body.price,
-//                 product: req.body.product
-
-//             });
-//             if (!order) {
-//                 throw new Error("check db connection, order table doesn't exit")
-//             }
-//             return res.status(200).json(order)
-//         }// if condition ends here
-
-//         return res.status(409).json({ message: "please fill all fields" })
-
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).send('Server error'); //error
-//     }
-// }
-
-// exports.deleteOrder = async (req, res) => {
-//     //delete Order
-//     try {
-//         const id = req.params.id;
-
-//         const order = await Order.query().findById(id);
-//         if (!order) {
-//             return res.status(204).json({ message: "order already deleted" })
-//         }
-
-//         const deleted = await Order.query().deleteById(id);
-//         if (!deleted) {
-//             throw new Error("check db connection, failed to delete order")
-//         }
-//         return res.status(200).json({ message: "order deleted" })
-
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).send('Server error'); //error
-//     }
-// }
-
-// exports.updateOrder = async (req, res) => {
-//     // update an order
-//     try {
-//         const id = req.params.id;
-//         const updatedEmployee = req.body;
-
-//         const order = await Order.query().findById(id).update(updatedEmployee);
-//         if (!order) {
-//             throw new Error("check db connection, failed to update order")
-//         }
-//         return res.status(200).json({ message: "order updated successfully" })
-
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).send('Server error'); //error
-//     }
-
-// }
 
