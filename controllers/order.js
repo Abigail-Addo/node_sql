@@ -106,7 +106,7 @@ exports.getOrderWithCustomerId = async (req, res) => {
             .where('customer_id', customer_id)
             .withGraphFetched('products')
             .orderBy('id')
-            
+
         return res.status(200).json(orders)
     } catch (error) {
         console.error(error); // Log the error message
@@ -144,16 +144,14 @@ exports.deleteOrders = async (req, res) => {
 exports.deleteOrder = async (req, res) => {
     //    write a similar thing to delete a single order by id from a customers orders
     try {
-        const { product_id } = req.params; // Get the order_id from route parameters
-
-        if (!product_id) {
-            return res.status(400).json({ message: "Missing or undefined product_id" });
+        const { id } = req.params; // Get the order_id from route parameters
+        if (!id) {
+            return res.status(400).json({ message: "Missing or undefined id" });
         }
 
         // Use the `deleteById` method to delete the order with the specified `order_id`
         const deletedOrder = await Order.query()
-            .where('product_id', product_id)
-            .delete();
+            .deleteById(id);
 
         if (!deletedOrder) {
             return res.status(404).json({ message: "Order not found" });

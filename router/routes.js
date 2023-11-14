@@ -63,7 +63,7 @@ router.delete('/v1/deleteOrders', (req, res)=> {
 })
 
 // delete a single order by id
-router.delete('/v1/deleteAnOrder/:product_id', (req, res)=> {
+router.delete('/v1/deleteAnOrder/:id', (req, res)=> {
     Order.deleteOrder(req, res);
 })
 
