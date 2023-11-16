@@ -41,7 +41,7 @@ exports.getOrders = async (req, res) => {
             .orderBy('id');
 
         if (!order) {
-            throw new Error('customer id deosnt exit')
+            throw new Error('customer id doesnt exit')
         }
         res.status(200).json({ message: 'orders from customer', order });
 
@@ -62,7 +62,6 @@ exports.CreateOrder = async (req, res) => {
             if (typeof (product_id == Number) || typeof (customer_id == Number)) {
                 // getting the price
                 const product = await Product.query().findById(product_id);
-                console.log(product)
 
                 if (product.price) {
                     //check if order is already inserted
